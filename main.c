@@ -8,42 +8,92 @@
 #include <time.h>
 #include <string.h>
 
-void GameLoop();
-
 struct Actor
 {
     int posX;
     int posY;
-    int actorId;
+    int actorId; // Mtn que j'y pense, est-ce que c'est vrm necessaire d'avoir un id si on a des index?
+};
+
+void ActorPositionUpdate(struct Actor actorList[8], int codeJoystick);
+void GameLoop();
+void InitializeActors(struct Actor actorList[8]);
+
+int GetJoystick();
+
+int main()
+{
+    GameLoop();
+    return 0;
 }
 
-main()
+void GameLoop()
 {
     // Ces deux variables servent a prendre en compte le temps pris par la boucle de jeu pour l'appel de sleep pour etre a 60hz
     clock_t before;
     clock_t now;
-    struct Actor actorList[8];
-    int codeJoystick; // 1 = droite, 2 = gauche, 3 = haut, 4 = bas, 5 = droite+btn, 6 = gauche+btn, 7 = haut+btn, 8 = bas+btn,
 
+    struct Actor actorList[8];
+    int codeJoystick; // 1 = droite, 2 = gauche, 3 = haut, 4 = bas, 5 = droite+btn, 6 = gauche+btn, 7 = haut+btn, 8 = bas+btn, 0 =err
+
+    InitializeActors(actorList);
+
+    // On va pouvoir se mettre une condition de fin de la loop
     while (1)
     {
         before = clock() / CLOCKS_PER_SEC * 1000; // Pour avoir le temps en ms
 
-        GameLoop(actorList);
+        codeJoystick = GetJoystick();
+        ActorPositionUpdate(actorList, codeJoystick);
 
         now = clock() / CLOCKS_PER_SEC * 1000;
 
         // 60Hz - delta entre quand on a commence et quand on a fini les operations avant sleep
-        printf("Execution time: %f\n", (now - before));
         // Sleep(16.6666666 - (now - before)); C'est pete, on dirait qu'il attend au debut avant de faire le reste genre before = ... jcomprend pas mais dans vitis sleep est diff so on est good
     }
+}
+
+// Sert a initiliser tous les acteurs
+void InitializeActors(struct Actor actorList[8])
+{
+    actorList[0].actorId = 0;
+    actorList[0].posX = 0;
+    actorList[0].posY = 0;
+
+    actorList[1].actorId = 1;
+    actorList[1].posX = 0;
+    actorList[1].posY = 0;
+
+    actorList[2].actorId = 2;
+    actorList[2].posX = 0;
+    actorList[2].posY = 0;
+
+    actorList[3].actorId = 3;
+    actorList[3].posX = 0;
+    actorList[3].posY = 0;
+
+    actorList[4].actorId = 4;
+    actorList[4].posX = 0;
+    actorList[4].posY = 0;
+
+    actorList[5].actorId = 5;
+    actorList[5].posX = 0;
+    actorList[5].posY = 0;
+
+    actorList[6].actorId = 6;
+    actorList[6].posX = 0;
+    actorList[6].posY = 0;
+
+    actorList[7].actorId = 7;
+    actorList[7].posX = 0;
+    actorList[7].posY = 0;
 }
 
 // Va chercher l'etat du joystick
 int GetJoystick()
 {
+    int codeJoystick = 0;
     /**
-       int codeJoystick;
        int deadZone = 15;
        int centre = 128;
 
@@ -109,10 +159,11 @@ int GetJoystick()
            }
        }
      **/
+
+    return codeJoystick;
 }
 
 // Boucle dans laquelle tous les acteurs bougent et on appelle la methode de verification de collisions
-void GameLoop(struct Actor actorList[8])
+void ActorPositionUpdate(struct Actor actorList[8], int codeJoystick)
 {
-    int salut = 1000 * 100 + 32 * 24;
 }
