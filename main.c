@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
+#include <stdbool.h>
 
 struct Actor
 {
@@ -15,7 +16,7 @@ struct Actor
     int actorId; // Mtn que j'y pense, est-ce que c'est vrm necessaire d'avoir un id si on a des index?
 };
 
-void ActorPositionUpdate(struct Actor actorList[8], int codeJoystick);
+void ActorPositionUpdate(struct Actor actorList[8], int codeJoystick, bool nextLineJump, bool lastLineJump, bool rightLineJump, bool leftLineJump);
 void GameLoop();
 void InitializeActors(struct Actor actorList[8]);
 
@@ -34,7 +35,12 @@ void GameLoop()
     clock_t now;
 
     struct Actor actorList[8];
-    int codeJoystick; // 1 = droite, 2 = gauche, 3 = haut, 4 = bas, 5 = droite+btn, 6 = gauche+btn, 7 = haut+btn, 8 = bas+btn, 0 =err
+
+    int codeJoystick;   // 1 = droite, 2 = gauche, 3 = haut, 4 = bas, 5 = droite+btn, 6 = gauche+btn, 7 = haut+btn, 8 = bas+btn, 0 =err
+    bool nextLineJump;  // Sert a savoir s'il faut sauter avec le bouton pour avancer (nenuphar)
+    bool lastLineJump;  // Sert a savoir s'il faut sauter avec le bouton pour reculer (nenuphar)
+    bool rightLineJump; // Sert a savoir s'il faut sauter avec le bouton pour aller a droite (nenuphar)
+    bool leftLineJump;  // Sert a savoir s'il faut sauter avec le bouton pour aller a gauche (nenuphar)
 
     InitializeActors(actorList);
 
@@ -44,7 +50,7 @@ void GameLoop()
         before = clock() / CLOCKS_PER_SEC * 1000; // Pour avoir le temps en ms
 
         codeJoystick = GetJoystick();
-        ActorPositionUpdate(actorList, codeJoystick);
+        ActorPositionUpdate(actorList, codeJoystick, nextLineJump, lastLineJump, rightLineJump, leftLineJump);
 
         now = clock() / CLOCKS_PER_SEC * 1000;
 
@@ -164,6 +170,50 @@ int GetJoystick()
 }
 
 // Boucle dans laquelle tous les acteurs bougent et on appelle la methode de verification de collisions
-void ActorPositionUpdate(struct Actor actorList[8], int codeJoystick)
+void ActorPositionUpdate(struct Actor actorList[8], int codeJoystick, bool nextLineJump, bool lastLineJump, bool rightLineJump, bool leftLineJump)
 {
+    // Mouvements de l'acteur
+    switch (codeJoystick)
+    {
+    case 1:
+        if (rightLineJump == false)
+        {
+            actorList[0].posX += 1;
+        }
+        break;
+    case 2:
+        if (leftLineJump == false)
+        {
+            actorList[0].posX -= 1;
+        }
+        break;
+    case 3:
+        if (nextLineJump == false)
+        {
+            actorList[0].posY += 1;
+        }
+        break;
+    case 4:
+        if (lastLineJump == false)
+        {
+            actorList[0].posY -= 1;
+        }
+        break;
+    case 5:
+        actorList[0].posX += 1;
+        break;
+    case 6:
+        actorList[0].posX -= 1;
+        break;
+    case 7:
+        actorList[0].posY += 1;
+        break;
+    case 8:
+        actorList[0].posY -= 1;
+        break;
+    }
+
+    // Mouvements des obstacles
+
+    // Gestion des collisions
 }
