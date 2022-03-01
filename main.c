@@ -59,6 +59,23 @@ void GameLoop()
     }
 }
 
+/**
+Carte du jeu:
+(0,224)
+    Y
+    |
+    |
+    |
+    |
+    |
+    |
+    |
+    |
+    |
+    |
+ 0,0------------------------------->(256,0)   X
+**/
+
 // Sert a initiliser tous les acteurs
 void InitializeActors(struct Actor actorList[8])
 {
@@ -172,7 +189,7 @@ int GetJoystick()
 // Boucle dans laquelle tous les acteurs bougent et on appelle la methode de verification de collisions
 void ActorPositionUpdate(struct Actor actorList[8], int codeJoystick, bool nextLineJump, bool lastLineJump, bool rightLineJump, bool leftLineJump)
 {
-    // Mouvements de l'acteur
+    // Mouvements du joueur
     switch (codeJoystick)
     {
     case 1:
