@@ -13,14 +13,104 @@ struct Actor
 {
     int posX;
     int posY;
-    int actorId; // Mtn que j'y pense, est-ce que c'est vrm necessaire d'avoir un id si on a des index?
+    int actorId; // 100 = innocuper
 };
+
+struct Camion
+{
+
+    struct Actor acteur[1];
+    int tuileid[1];
+};
+
+struct Rondin
+{
+
+    struct Actor acteur[1];
+    int tuileid[1];
+};
+
+// variable Global
+#define NOMBREACTEUR 32
+
+struct Rondin listRondin[3]; // grandeur peut varier si vous voulez plus d'Acteur
+struct Camion listCamion[4]; // grandeur peut varier si vous voulez plus d'Acteur
+struct Actor actorList[NOMBREACTEUR];
+
+float speedligne2 = 1;
+float speedligne3 = 1;
+float speedligne5 = 1;
+float speedligne6 = 1;
+float speedligne7 = 1;
+float speedligne8 = 1;
+float speedligne9 = 1;
+float speedligne10 = 1;
+float speedligne11 = 1;
+float speedligne12 = 1;
 
 void ActorPositionUpdate(struct Actor actorList[8], int codeJoystick, bool nextLineJump, bool lastLineJump, bool rightLineJump, bool leftLineJump);
 void GameLoop();
 void InitializeActors(struct Actor actorList[8]);
 
 int GetJoystick();
+
+void updateObstacle()
+{
+    for (int i = 1; i <= 4; i++)
+    {
+        actorList[i].posX = actorList[i].posX + 1 * speedligne2;
+    }
+
+    for (int i = 5; i <= 8; i++)
+    {
+        actorList[i].posX = actorList[i].posX + 1 * speedligne3;
+    }
+
+    for (int i = 9; i <= 11; i++)
+    {
+        actorList[i].posX = actorList[i].posX + 1 * speedligne5;
+    }
+    for (int i = 12; i <= 13; i++)
+    {
+        actorList[i].posX = actorList[i].posX + 1 * speedligne6;
+    }
+    for (int i = 14; i <= 17; i++)
+    {
+        actorList[i].posX = actorList[i].posX + 1 * speedligne7;
+    }
+    for (int i = 18; i <= 21; i++)
+    {
+        actorList[i].posX = actorList[i].posX + 1 * speedligne8;
+    }
+
+    for (int i = 22; i <= 23; i++)
+    {
+        actorList[i].posX = actorList[i].posX + 1 * speedligne9;
+    }
+
+    for (int i = 24; i <= 27; i++)
+    {
+        actorList[i].posX = actorList[i].posX + 1 * speedligne10;
+    }
+
+    for (int i = 28; i <= 29; i++)
+    {
+        actorList[i].posX = actorList[i].posX + 1 * speedligne11;
+    }
+
+    for (int i = 30; i <= 31; i++)
+    {
+        actorList[i].posX = actorList[i].posX + 1 * speedligne12;
+    }
+
+    for (int i = 0; i < NOMBREACTEUR; i++)
+    {
+        if (actorList[i].posX = -1)
+        {
+            actorList[i].posX = 256;
+        }
+    }
+}
 
 int main()
 {
@@ -33,8 +123,6 @@ void GameLoop()
     // Ces deux variables servent a prendre en compte le temps pris par la boucle de jeu pour l'appel de sleep pour etre a 60hz
     clock_t before;
     clock_t now;
-
-    struct Actor actorList[8];
 
     int codeJoystick;   // 1 = droite, 2 = gauche, 3 = haut, 4 = bas, 5 = droite+btn, 6 = gauche+btn, 7 = haut+btn, 8 = bas+btn, 0 =err
     bool nextLineJump;  // Sert a savoir s'il faut sauter avec le bouton pour avancer (nenuphar)
@@ -74,42 +162,42 @@ Carte du jeu:
     |
     |
  0,0------------------------------->(256,0)   X
+
+liste Acteur ligne pars de 0
+0 Grenouille   partout
+1-2   voiture2x1  1 ligne 2
+3-4   voirute2x1  2 ligne 2
+5-6   voiture2x1  1 ligne 3
+7-8   voiture2x1  2 ligne 3
+9     buche1x1    1 ligne 5
+10-11  buche2x1    2 ligne 5
+12-13 buche3x1   1 ligne 6
+14-15 buche2x1   1 ligne 7
+16-17 buche2x1   2 ligne 7
+18-19 voiture2x1  1 ligne 8
+20-21 voiture2x1  2 ligne 8
+22-23 voiture3x1  1 ligne 9
+24-25 voiture2x1  1 ligne 10
+26-27 voiture2x1  2 ligne 10
+28    buche 1x1   1 ligne 11
+29    buche 1x1   1 ligne 11
+30    buche 1x1   1 ligne 12
+31    buche 1x1   1 ligne 12
+
 **/
 
 // Sert a initiliser tous les acteurs
 void InitializeActors(struct Actor actorList[8])
 {
-    actorList[0].actorId = 0;
-    actorList[0].posX = 0;
-    actorList[0].posY = 0;
+    for (int i = 0; i < NOMBREACTEUR; i++)
+    {
+        actorList->actorId = 100; // 100 = innocupé besoin pour ma logique
+        actorList->posX = 0;
+        actorList->posY = 0;
+    }
 
-    actorList[1].actorId = 1;
-    actorList[1].posX = 0;
-    actorList[1].posY = 0;
-
-    actorList[2].actorId = 2;
-    actorList[2].posX = 0;
-    actorList[2].posY = 0;
-
-    actorList[3].actorId = 3;
-    actorList[3].posX = 0;
-    actorList[3].posY = 0;
-
-    actorList[4].actorId = 4;
-    actorList[4].posX = 0;
-    actorList[4].posY = 0;
-
-    actorList[5].actorId = 5;
-    actorList[5].posX = 0;
-    actorList[5].posY = 0;
-
-    actorList[6].actorId = 6;
-    actorList[6].posX = 0;
-    actorList[6].posY = 0;
-
-    actorList[7].actorId = 7;
-    actorList[7].posX = 0;
-    actorList[7].posY = 0;
+    // joueur
+    actorList->actorId = 1;
 }
 
 // Va chercher l'etat du joystick
@@ -231,6 +319,7 @@ void ActorPositionUpdate(struct Actor actorList[8], int codeJoystick, bool nextL
     }
 
     // Mouvements des obstacles
+    updateObstacle();
 
     // Gestion des collisions
 }
