@@ -13,26 +13,15 @@ struct Actor
 {
     int posX;
     int posY;
-    int actorId; // 100 = innocuper
-};
-
-struct Camion
-{
-
-    struct Actor acteur[1];
-    int tuileid[1];
-};
-
-struct Rondin
-{
-
-    struct Actor acteur[1];
-    int tuileid[1];
+    int tuileid;
+    bool dangereux;
+  
 };
 
 // variable Global
 #define NOMBREACTEUR 32
-
+#define LIGNE 14
+#define COLONNE 16
 struct Rondin listRondin[3]; // grandeur peut varier si vous voulez plus d'Acteur
 struct Camion listCamion[4]; // grandeur peut varier si vous voulez plus d'Acteur
 struct Actor actorList[NOMBREACTEUR];
@@ -54,6 +43,18 @@ void InitializeActors(struct Actor actorList[8]);
 
 int GetJoystick();
 
+void updateCollision()
+{
+    for(int i =0 ;i < NOMBREACTEUR;i++ )
+    {
+        if((actorList[0].posX = actorList[i].posX) && (actorList[0].posY = actorList[i].posY) && actorList[i].dangereux == true);
+        //gameOver
+        actorList[0].posX = COLONNE * 8;
+        actorList[0].posY = 0;
+        actorList[0].tuileid = 5;
+
+    }
+}
 void updateObstacle()
 {
     for (int i = 1; i <= 4; i++)
@@ -130,7 +131,7 @@ void GameLoop()
     bool rightLineJump; // Sert a savoir s'il faut sauter avec le bouton pour aller a droite (nenuphar)
     bool leftLineJump;  // Sert a savoir s'il faut sauter avec le bouton pour aller a gauche (nenuphar)
 
-    InitializeActors(actorList);
+    InitializeActors();
 
     // On va pouvoir se mettre une condition de fin de la loop
     while (1)
@@ -138,7 +139,7 @@ void GameLoop()
         before = clock() / CLOCKS_PER_SEC * 1000; // Pour avoir le temps en ms
 
         codeJoystick = GetJoystick();
-        ActorPositionUpdate(actorList, codeJoystick, nextLineJump, lastLineJump, rightLineJump, leftLineJump);
+        ActorPositionUpdate(&actorList, codeJoystick, nextLineJump, lastLineJump, rightLineJump, leftLineJump);
 
         now = clock() / CLOCKS_PER_SEC * 1000;
 
@@ -171,33 +172,228 @@ liste Acteur ligne pars de 0
 7-8   voiture2x1  2 ligne 3
 9     buche1x1    1 ligne 5
 10-11  buche2x1    2 ligne 5
-12-13 buche3x1   1 ligne 6
-14-15 buche2x1   1 ligne 7
-16-17 buche2x1   2 ligne 7
-18-19 voiture2x1  1 ligne 8
-20-21 voiture2x1  2 ligne 8
-22-23 voiture3x1  1 ligne 9
-24-25 voiture2x1  1 ligne 10
-26-27 voiture2x1  2 ligne 10
-28    buche 1x1   1 ligne 11
-29    buche 1x1   1 ligne 11
-30    buche 1x1   1 ligne 12
-31    buche 1x1   1 ligne 12
+12-14 buche3x1   1 ligne 6
+15-16 buche2x1   1 ligne 7
+17-18 buche2x1   2 ligne 7
+19-20 voiture2x1  1 ligne 8
+21-22 voiture2x1  2 ligne 8
+23-25 voiture3x1  1 ligne 9
+26-27 voiture2x1  1 ligne 10
+28-29 voiture2x1  2 ligne 10
+30    buche 1x1   1 ligne 11
+31    buche 1x1   1 ligne 11
+32    buche 1x1   1 ligne 12
+33    buche 1x1   1 ligne 12
 
 **/
 
 // Sert a initiliser tous les acteurs
-void InitializeActors(struct Actor actorList[8])
+void InitializeActors()
 {
-    for (int i = 0; i < NOMBREACTEUR; i++)
-    {
-        actorList->actorId = 100; // 100 = innocupé besoin pour ma logique
-        actorList->posX = 0;
-        actorList->posY = 0;
-    }
-
+    
     // joueur
-    actorList->actorId = 1;
+    actorList[0].posX = COLONNE * 8;
+    actorList[0].posY = 0;
+    actorList[0].dangereux = false;
+    actorList[0].tuileid = 1;
+    
+   //voiture 1
+    actorList[1].posX = COLONNE*15;
+    actorList[1].posY = LIGNE * 2;
+    actorList[1].dangereux = true;
+    actorList[1].tuileid = 2;
+
+    actorList[2].posX = COLONNE*16;
+    actorList[2].posY = LIGNE * 2;
+    actorList[2].dangereux = true;
+    actorList[2].tuileid = 3;
+
+    //voiture 2
+    actorList[3].posX = COLONNE*2;
+    actorList[3].posY = LIGNE * 2;
+    actorList[3].dangereux = true;
+    actorList[3].tuileid = 2;
+
+    actorList[4].posX = COLONNE*3;
+    actorList[4].posY = LIGNE * 2;
+    actorList[4].dangereux = true;
+    actorList[4].tuileid = 3;
+
+
+   //voiture 3
+    actorList[5].posX = COLONNE*15;
+    actorList[5].posY = LIGNE * 3;
+    actorList[5].dangereux = true;
+    actorList[5].tuileid = 2;
+
+    actorList[6].posX = COLONNE*16;
+    actorList[6].posY = LIGNE * 3;
+    actorList[6].dangereux = true;
+    actorList[6].tuileid = 3;
+
+    //voiture 4
+    actorList[7].posX = COLONNE*2;
+    actorList[7].posY = LIGNE * 3;
+    actorList[7].dangereux = true;
+    actorList[7].tuileid = 2;
+
+    actorList[8].posX = COLONNE*3;
+    actorList[8].posY = LIGNE * 3;
+    actorList[8].dangereux = true;
+    actorList[8].tuileid = 3;
+
+    //Buche1
+    actorList[9].posX = COLONNE*9;
+    actorList[9].posY = LIGNE * 5;
+    actorList[9].dangereux = false;
+    actorList[9].tuileid = 4;
+
+     //Buche2
+    actorList[10].posX = COLONNE*2;
+    actorList[10].posY = LIGNE * 5;
+    actorList[10].dangereux = false;
+    actorList[10].tuileid = 4;
+
+    actorList[11].posX = COLONNE*3;
+    actorList[11].posY = LIGNE * 5;
+    actorList[11].dangereux = false;
+    actorList[11].tuileid = 4;
+
+    
+     //Buche3
+    actorList[12].posX = COLONNE*14;
+    actorList[12].posY = LIGNE * 6;
+    actorList[12].dangereux = false;
+    actorList[12].tuileid = 4;
+
+    actorList[13].posX = COLONNE*15;
+    actorList[13].posY = LIGNE * 6;
+    actorList[13].dangereux = false;
+    actorList[13].tuileid = 4;
+
+    actorList[14].posX = COLONNE*16;
+    actorList[14].posY = LIGNE * 6;
+    actorList[14].dangereux = false;
+    actorList[14].tuileid = 4;
+
+     //Buche4
+    actorList[15].posX = COLONNE*15;
+    actorList[15].posY = LIGNE * 7;
+    actorList[15].dangereux = false;
+    actorList[15].tuileid = 4;
+
+    actorList[16].posX = COLONNE*16;
+    actorList[16].posY = LIGNE * 7;
+    actorList[16].dangereux = false;
+    actorList[16].tuileid = 4;
+
+    //Buche5
+    actorList[17].posX = COLONNE*2;
+    actorList[17].posY = LIGNE * 7;
+    actorList[17].dangereux = false;
+    actorList[17].tuileid = 4;
+
+    actorList[18].posX = COLONNE*3;
+    actorList[18].posY = LIGNE * 7;
+    actorList[18].dangereux = false;
+    actorList[18].tuileid = 4;
+
+
+    //voiture 5
+    actorList[19].posX = COLONNE*15;
+    actorList[19].posY = LIGNE * 8;
+    actorList[19].dangereux = true;
+    actorList[19].tuileid = 2;
+
+    actorList[20].posX = COLONNE*16;
+    actorList[20].posY = LIGNE * 8;
+    actorList[20].dangereux = true;
+    actorList[20].tuileid = 3;
+    
+    //voiture 6
+    actorList[21].posX = COLONNE*2;
+    actorList[21].posY = LIGNE * 8;
+    actorList[21].dangereux = true;
+    actorList[21].tuileid = 2;
+
+    actorList[22].posX = COLONNE*3;
+    actorList[22].posY = LIGNE * 8;
+    actorList[22].dangereux = true;
+    actorList[22].tuileid = 3;
+
+     //voiture 7
+    actorList[23].posX = COLONNE*8;
+    actorList[23].posY = LIGNE * 9;
+    actorList[23].dangereux = true;
+    actorList[23].tuileid = 2;
+
+    actorList[24].posX = COLONNE*9;
+    actorList[24].posY = LIGNE * 9;
+    actorList[24].dangereux = true;
+    actorList[24].tuileid = 3;
+
+    actorList[25].posX = COLONNE*10;
+    actorList[25].posY = LIGNE * 9;
+    actorList[25].dangereux = true;
+    actorList[25].tuileid = 3;
+
+        //voiture 8
+    actorList[26].posX = COLONNE*15;
+    actorList[26].posY = LIGNE * 10;
+    actorList[26].dangereux = true;
+    actorList[26].tuileid = 2;
+
+    actorList[27].posX = COLONNE*16;
+    actorList[27].posY = LIGNE * 10;
+    actorList[27].dangereux = true;
+    actorList[27].tuileid = 3;
+
+    //voiture 9
+    actorList[28].posX = COLONNE*2;
+    actorList[28].posY = LIGNE * 10;
+    actorList[28].dangereux = true;
+    actorList[28].tuileid = 2;
+
+    actorList[29].posX = COLONNE*3;
+    actorList[29].posY = LIGNE * 10;
+    actorList[29].dangereux = true;
+    actorList[29].tuileid = 3;
+
+    //voiture 10
+    actorList[28].posX = COLONNE*2;
+    actorList[28].posY = LIGNE * 10;
+    actorList[28].dangereux = true;
+    actorList[28].tuileid = 2;
+
+    actorList[29].posX = COLONNE*3;
+    actorList[29].posY = LIGNE * 10;
+    actorList[29].dangereux = true;
+    actorList[29].tuileid = 3;
+
+        //Buche6
+    actorList[30].posX = COLONNE*6;
+    actorList[30].posY = LIGNE * 11;
+    actorList[30].dangereux = false;
+    actorList[30].tuileid = 4;
+
+      //Buche7
+    actorList[31].posX = COLONNE*16;
+    actorList[31].posY = LIGNE * 11;
+    actorList[31].dangereux = false;
+    actorList[31].tuileid = 4;
+
+    //Buche8
+    actorList[32].posX = COLONNE*14;
+    actorList[32].posY = LIGNE * 12;
+    actorList[32].dangereux = false;
+    actorList[32].tuileid = 4;
+
+    //Buche9
+    actorList[32].posX = COLONNE*8;
+    actorList[32].posY = LIGNE * 12;
+    actorList[32].dangereux = false;
+    actorList[32].tuileid = 4;
+
 }
 
 // Va chercher l'etat du joystick
@@ -320,6 +516,7 @@ void ActorPositionUpdate(struct Actor actorList[8], int codeJoystick, bool nextL
 
     // Mouvements des obstacles
     updateObstacle();
+    updateCollision();
 
     // Gestion des collisions
 }
